@@ -5,25 +5,27 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <meta name="description" content="MedCare is a simple medicine reminder application that helps users organize their medication schedules.">
+    <meta name="description" content="Manage your medication schedule and daily reminders with MedCare.">
 
-    <title>MedCare | Medicine Reminder</title>
+    <title>Dashboard | MedCare</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="style.css">
+
+    <script src="script.js" defer></script>
 </head>
 
-<body class="login-page">
+<body class="dashboard-page">
 
-    <main class="login-container">
+    <div class="app-layout">
 
-        <section class="login-card">
+        <!-- Sidebar -->
+        <aside class="sidebar">
 
-            <!-- Application Branding -->
-            <div class="brand">
+            <a href="dashboard.html" class="brand">
                 <div class="brand-icon" aria-hidden="true">
                     <svg viewBox="0 0 24 24" fill="none">
                         <path d="M12 3V21M3 12H21"
@@ -32,85 +34,248 @@
                               stroke-linecap="round"/>
                     </svg>
                 </div>
-
                 <span class="brand-name">MedCare</span>
-            </div>
+            </a>
 
-            <!-- Welcome Section -->
-            <div class="welcome-section">
-                <p class="eyebrow">YOUR PERSONAL HEALTH COMPANION</p>
+            <nav class="sidebar-nav" aria-label="Main navigation">
+                <a href="#overview" class="nav-link active">
+                    <span aria-hidden="true">▦</span>
+                    Overview
+                </a>
 
-                <h1>Stay on track with your medication.</h1>
+                <a href="#medicines" class="nav-link">
+                    <span aria-hidden="true">▤</span>
+                    My Medicines
+                </a>
+            </nav>
 
-                <p class="welcome-description">
-                    Manage your medicines, organize your daily schedule,
-                    and stay consistent with your medication routine.
-                </p>
-            </div>
-
-            <!-- Login Form -->
-            <form id="loginForm" class="login-form">
-
-                <div class="form-group">
-                    <label for="userName">Your name</label>
-
-                    <input
-                        type="text"
-                        id="userName"
-                        name="userName"
-                        placeholder="Enter your name"
-                        autocomplete="name"
-                        maxlength="50"
-                        required
-                    >
+            <div class="sidebar-bottom">
+                <div class="sidebar-help">
+                    <div class="help-icon" aria-hidden="true">♡</div>
+                    <h3>Take care of yourself</h3>
+                    <p>Small steps every day make a difference.</p>
                 </div>
 
-                <button type="submit" class="primary-button">
-                    Continue
-                    <span aria-hidden="true">→</span>
+                <button type="button" id="logoutButton" class="logout-button">
+                    <span aria-hidden="true">↪</span>
+                    Log out
                 </button>
-
-            </form>
-
-            <!-- Privacy Information -->
-            <div class="login-footer">
-                <span class="privacy-icon" aria-hidden="true">✓</span>
-                <p>Your medication schedule stays in this browser.</p>
             </div>
 
-        </section>
+        </aside>
 
-        <!-- Bottom Disclaimer -->
-        <footer class="page-footer">
-            <p>
-                MedCare is an educational reminder application.
-                It does not replace professional medical advice.
-            </p>
-        </footer>
+        <!-- Main Content -->
+        <main class="main-content" id="overview">
 
-    </main>
+            <!-- Top Header -->
+            <header class="top-header">
+                <div>
+                    <p class="header-date" id="currentDate"></p>
+                    <h1 id="greeting">Welcome back!</h1>
+                    <p class="header-subtitle">
+                        Here's an overview of your medication routine.
+                    </p>
+                </div>
 
-    <script>
-        const loginForm = document.getElementById("loginForm");
-        const userNameInput = document.getElementById("userName");
+                <div class="profile-avatar" id="profileAvatar" aria-label="User profile">
+                    U
+                </div>
+            </header>
 
-        loginForm.addEventListener("submit", function (event) {
-            event.preventDefault();
+            <!-- Summary Cards -->
+            <section class="summary-grid" aria-label="Medication summary">
 
-            const userName = userNameInput.value.trim();
+                <article class="summary-card">
+                    <div class="summary-top">
+                        <span class="summary-label">Total medicines</span>
+                        <span class="summary-icon medicine-icon" aria-hidden="true">✚</span>
+                    </div>
+                    <p class="summary-value" id="totalMedicines">0</p>
+                    <p class="summary-description">Medicines in your schedule</p>
+                </article>
 
-            if (!userName) {
-                userNameInput.focus();
-                return;
-            }
+                <article class="summary-card">
+                    <div class="summary-top">
+                        <span class="summary-label">Taken today</span>
+                        <span class="summary-icon taken-icon" aria-hidden="true">✓</span>
+                    </div>
+                    <p class="summary-value" id="takenMedicines">0</p>
+                    <p class="summary-description">Medicines marked as taken</p>
+                </article>
 
-            // Save the user's name in the browser
-            localStorage.setItem("medcareUser", userName);
+                <article class="summary-card">
+                    <div class="summary-top">
+                        <span class="summary-label">Remaining today</span>
+                        <span class="summary-icon remaining-icon" aria-hidden="true">◷</span>
+                    </div>
+                    <p class="summary-value" id="remainingMedicines">0</p>
+                    <p class="summary-description">Scheduled doses not yet taken</p>
+                </article>
 
-            // Navigate to the dashboard
-            window.location.href = "dashboard.html";
-        });
-    </script>
+            </section>
+
+            <!-- Medicine Section -->
+            <section class="medicine-section" id="medicines">
+
+                <div class="section-heading">
+                    <div>
+                        <p class="eyebrow">YOUR DAILY ROUTINE</p>
+                        <h2>Medicine schedule</h2>
+                        <p class="section-description">
+                            Keep track of your medicines and their timings.
+                        </p>
+                    </div>
+
+                    <button type="button" id="addMedicineButton" class="primary-button add-button">
+                        <span aria-hidden="true">+</span>
+                        Add medicine
+                    </button>
+                </div>
+
+                <!-- Notification Settings -->
+                <div class="notification-banner">
+                    <div class="notification-content">
+                        <span class="notification-symbol" aria-hidden="true">♧</span>
+                        <div>
+                            <h3>Stay reminded</h3>
+                            <p>Enable browser notifications for scheduled medicine reminders while the app is open.</p>
+                        </div>
+                    </div>
+
+                    <button type="button" id="enableNotifications" class="secondary-button">
+                        Enable notifications
+                    </button>
+                </div>
+
+                <!-- Medicine List -->
+                <div class="medicine-list-card">
+
+                    <div class="list-header">
+                        <h3>Today's medicines</h3>
+                        <span id="medicineCount" class="count-label">0 medicines</span>
+                    </div>
+
+                    <div id="medicineList" class="medicine-list">
+
+                        <!-- Medicine entries are added dynamically using JavaScript -->
+
+                        <div id="emptyState" class="empty-state">
+                            <div class="empty-icon" aria-hidden="true">✚</div>
+                            <h3>No medicines added yet</h3>
+                            <p>Add your first medicine to start organizing your schedule.</p>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <!-- Add/Edit Medicine Modal -->
+            <div id="medicineModal" class="modal" aria-hidden="true">
+
+                <div class="modal-overlay" id="modalOverlay"></div>
+
+                <section
+                    class="modal-content"
+                    role="dialog"
+                    aria-modal="true"
+                    aria-labelledby="modalTitle"
+                >
+
+                    <div class="modal-header">
+                        <div>
+                            <p class="eyebrow">MEDICATION DETAILS</p>
+                            <h2 id="modalTitle">Add a medicine</h2>
+                        </div>
+
+                        <button
+                            type="button"
+                            id="closeModalButton"
+                            class="close-modal"
+                            aria-label="Close form"
+                        >
+                            ×
+                        </button>
+                    </div>
+
+                    <form id="medicineForm">
+
+                        <input type="hidden" id="medicineId">
+
+                        <div class="form-group">
+                            <label for="medicineName">Medicine name</label>
+                            <input
+                                type="text"
+                                id="medicineName"
+                                placeholder="e.g. Vitamin D"
+                                maxlength="80"
+                                required
+                            >
+                        </div>
+
+                        <div class="form-row">
+
+                            <div class="form-group">
+                                <label for="medicineDosage">Dosage</label>
+                                <input
+                                    type="text"
+                                    id="medicineDosage"
+                                    placeholder="e.g. 1 tablet"
+                                    maxlength="40"
+                                    required
+                                >
+                            </div>
+
+                            <div class="form-group">
+                                <label for="medicineTime">Reminder time</label>
+                                <input
+                                    type="time"
+                                    id="medicineTime"
+                                    required
+                                >
+                            </div>
+
+                        </div>
+
+                        <div class="form-group">
+                            <label for="medicineNotes">Additional notes (optional)</label>
+                            <textarea
+                                id="medicineNotes"
+                                rows="3"
+                                maxlength="250"
+                                placeholder="e.g. Take after food"
+                            ></textarea>
+                        </div>
+
+                        <div class="modal-actions">
+                            <button type="button" id="cancelModalButton" class="secondary-button">
+                                Cancel
+                            </button>
+
+                            <button type="submit" class="primary-button">
+                                Save medicine
+                            </button>
+                        </div>
+
+                    </form>
+
+                </section>
+
+            </div>
+
+            <!-- Footer -->
+            <footer class="dashboard-footer">
+                <p>
+                    MedCare is an educational reminder application.
+                    Always follow the instructions provided by your healthcare professional.
+                </p>
+            </footer>
+
+        </main>
+
+    </div>
 
 </body>
 </html>
+
